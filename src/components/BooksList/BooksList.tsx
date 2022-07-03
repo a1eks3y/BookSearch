@@ -21,6 +21,7 @@ const BooksList: React.FC = () => {
                 books.map(el => (
                     <BookCard
                         key={ el.uniqueId }
+                        uniqueId={ el.uniqueId }
                         id={ el.id }
                         category={ (el.categories ?? [])[ 0 ] }
                         authors={ el.authors }
