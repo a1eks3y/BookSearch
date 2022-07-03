@@ -7,9 +7,10 @@ export const fetchBooks = ( searchQuery: string ): ThunkAction<void, IBooksState
         try {
             dispatch(fetchBooksActionCreator(searchQuery))
             const key = 'key=AIzaSyC1USBJdOR0oJgkkIyWcqQ7dEqYW8DF7Mk'
-            const url = `https://www.googleapis.com/books/v1/volumes?${ searchQuery }&maxResults=40&${ key }`
+            const url = `https://www.googleapis.com/books/v1/volumes?${ searchQuery }&maxResults=30&${ key }`
             const res = await axios.get<fetchBooksResponseData>(url)
-            const books: IBook[] = res.data.items.map(( { id, volumeInfo } ) => ({
+            const books: IBook[] = (res.data.items ?? []).map(( { id, volumeInfo, etag } ) => ({
+                uniqueId : etag,
                 id,
                 authors : volumeInfo.authors,
                 title : volumeInfo.title,
@@ -31,17 +32,29 @@ export const fetchMoreBooks = (): ThunkAction<void, IBooksState, unknown, IBooks
             dispatch(fetchMoreActionCreator())
             const searchQuery = state.searchQuery
             const key = 'key=AIzaSyC1USBJdOR0oJgkkIyWcqQ7dEqYW8DF7Mk'
-            const startIndex = 'startIndex=' + books.length
-            const url = `https://www.googleapis.com/books/v1/volumes?${searchQuery}&${startIndex}&maxResults=30&${key}`
-            const res = await axios.get<fetchBooksResponseData>(url)
-            const newBooks: IBook[] = res.data.items.map(( { id, volumeInfo } ) => ({
-                id,
-                authors : volumeInfo.authors,
-                title : volumeInfo.title,
-                description : volumeInfo.description,
-                categories : volumeInfo.categories
-            }))
-            dispatch(fetchSuccessActionCreator([...books, ...newBooks], res.data.totalItems))
+            let newBooks: IBook[] = []
+            let numberOfBooks = 0
+            while ( newBooks.length < 30 ) {
+                const startIndex = 'startIndex=' + (books.length + newBooks.length)
+                const maxResult = 'maxResults=' + (30 - newBooks.length)
+                const url = `https://www.googleapis.com/books/v1/volumes?` +
+                    `${ searchQuery }&${ startIndex }&${maxResult}&${ key }`
+                const res = await axios.get<fetchBooksResponseData>(url)
+                if ( !numberOfBooks )
+                    numberOfBooks = res.data.totalItems
+                newBooks = [
+                    ...newBooks,
+                    ...(res.data.items ?? []).map(( { id, volumeInfo, etag } ) => ({
+                        uniqueId : etag,
+                        id,
+                        authors : volumeInfo.authors,
+                        title : volumeInfo.title,
+                        description : volumeInfo.description,
+                        categories : volumeInfo.categories
+                    }))
+                ]
+            }
+            dispatch(fetchSuccessActionCreator([...books, ...newBooks], numberOfBooks))
         } catch (e: any) {
             dispatch(fetchErrorActionCreator(e.response?.message || e.message))
         }

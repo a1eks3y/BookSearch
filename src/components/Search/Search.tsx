@@ -1,7 +1,7 @@
 import * as React from 'react'
 import s from './Search.module.css'
 import searchSvg from '../../images/search.svg'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAction } from '../../hooks/useAction'
 
 const Search: React.FC = () => {
@@ -13,6 +13,9 @@ const Search: React.FC = () => {
         const searchCategoryInUrl = searchCategory !== 'all' ? '+subject:' + searchCategory : ''
         fetchBooks(`q=${ searchText || '""' }${ searchCategoryInUrl }&orderBy=${ searchSortBy }`)
     }
+    useEffect(() => {
+        fetchBooks('q=""&orderBy=relevance')
+    }, [fetchBooks])
     return (
         <div className={ s.search }>
             <h1 className={ s.search_title }>Search for books</h1>

@@ -7,10 +7,11 @@ export interface IBooksState {
 }
 
 export interface IBook {
+    uniqueId: string
     id: string
     title: string
     authors: string[]
-    categories: string[]
+    categories?: string[]
     description: string
 }
 
@@ -28,8 +29,9 @@ interface fetchBooks {
 
 export interface fetchBooksResponseData {
     totalItems: number
-    items: {
+    items?: {
         id: string
+        etag: string
         volumeInfo: {
             title: string
             authors: string[]

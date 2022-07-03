@@ -1,0 +1,42 @@
+.card {
+    cursor: pointer;
+    width: 280px;
+    min-height: 400px;
+    padding: 20px;
+    background: #F3F2F1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card_info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    gap: 7px;
+    font-size: 16px;
+}
+
+.card_info > :first-child.title {
+    margin-top: 32px;
+}
+
+.category {
+    color: gray;
+    text-decoration: underline;
+    margin-bottom: 5px;
+}
+
+.authors {
+    min-height: 21px;
+    color: gray;
+}
+
+.front_cover {
+    box-shadow: 10px 10px 30px -8px rgba(34, 60, 80, 0.65);
+    width: 162px;
+    height: 232px;
+}
