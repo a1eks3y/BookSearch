@@ -20,7 +20,7 @@ const Search: React.FC = () => {
     const booksLength = useRef<number>(books.length)
     booksLength.current = books.length
     useEffect(() => {
-        if ( !location.pathname.split('/')[ 2 ] && booksLength.current <= 1 && !isLoading)
+        if ( !location.pathname.split('/')[ 2 ] && booksLength.current <= 1 && !isLoading )
             fetchBooks('q=""') //get books on first reload of homepage
     }, [fetchBooks, location, isLoading])
     return (
@@ -51,6 +51,7 @@ const Search: React.FC = () => {
                 <label className={ s.search_query_item }>
                     Categories
                     <select
+                        disabled={ !!location.pathname.split('/')[ 2 ] }
                         className={ s.search_select }
                         value={ searchCategory }
                         onChange={ e => {
@@ -70,6 +71,7 @@ const Search: React.FC = () => {
                 <label className={ s.search_query_item }>
                     Sorting by
                     <select
+                        disabled={ !!location.pathname.split('/')[ 2 ] }
                         className={ s.search_select }
                         value={ searchSortBy }
                         onChange={ e => {
