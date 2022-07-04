@@ -8,7 +8,7 @@ import { useTypedSelector } from '../../hooks/useTypedSelector'
 
 const Search: React.FC = () => {
     const location = useLocation()
-    const { books } = useTypedSelector(state => state)
+    const { books, isLoading } = useTypedSelector(state => state)
     const [searchText, setSearchText] = useState<string>('')
     const [searchCategory, setSearchCategory] = useState<string>('all')
     const [searchSortBy, setSearchSortBy] = useState<string>('relevance')
@@ -20,9 +20,9 @@ const Search: React.FC = () => {
     const booksLength = useRef<number>(books.length)
     booksLength.current = books.length
     useEffect(() => {
-        if ( !location.pathname.split('/')[ 2 ] && booksLength.current <= 1)
+        if ( !location.pathname.split('/')[ 2 ] && booksLength.current <= 1 && !isLoading)
             fetchBooks('q=""') //get books on first reload of homepage
-    }, [fetchBooks, location])
+    }, [fetchBooks, location, isLoading])
     return (
         <div className={ s.search }>
             <h1 className={ s.search_title }>Search for books</h1>
