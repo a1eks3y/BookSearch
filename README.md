@@ -1,8 +1,7 @@
 # Getting Started with Docker
 
-### In the project directory, you can run this script:
+## You can run this script to run docker container:
 
-### `docker run -it --rm --name BookSearch -p 8080:80 book_search`
+### `docker run --name book_search -p 8080:80 yhrage524/book_search:latest`
 
-Runs the app in the production mode.\
 Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
