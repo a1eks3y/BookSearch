@@ -36,7 +36,8 @@
     position: absolute;
     right: 6px;
 }
-.search_btn svg{
+
+.search_btn svg {
     width: 26px;
     height: 26px;
 }
@@ -84,8 +85,9 @@
 
 @media (max-width: 800px) {
     .search_input {
-        width: max(70vw, 300px);
+        width: max(70vw, 290px);
     }
+
     .search {
         background-size: 90vw;
     }

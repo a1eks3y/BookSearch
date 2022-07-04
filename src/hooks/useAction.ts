@@ -1,11 +1,13 @@
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { fetchBooks, fetchMoreBooks } from '../store/actions/booksActions'
+import { fetchBooks, fetchMoreBooks, fetchOneBook } from '../store/actions/booksActions'
+import { useMemo } from 'react'
 
 export const useAction = () => {
     const dispatch = useDispatch()
-    return bindActionCreators({
+    return useMemo(() => bindActionCreators({
+        fetchOneBook,
         fetchBooks,
         fetchMoreBooks
-    }, dispatch)
+    }, dispatch), [dispatch])
 }

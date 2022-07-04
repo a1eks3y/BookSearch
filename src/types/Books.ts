@@ -18,6 +18,7 @@ export interface IBook {
 export enum IBooksActionType {
     FETCH = 'FETCH',
     FETCH_MORE = 'FETCH_MORE',
+    FETCH_ONE = 'FETCH_ONE',
     FETCH_SUCCESS = 'FETCH_SUCCESS',
     FETCH_ERROR = 'FETCH_ERROR'
 }
@@ -27,25 +28,27 @@ interface fetchBooks {
     payload: string // searchQuery
 }
 
+export type fetchBookItemResponseData = {
+    id: string
+    etag: string
+    volumeInfo: {
+        title: string
+        authors: string[]
+        description: string
+        categories: string[]
+    }
+}
+
 export interface fetchBooksResponseData {
     totalItems: number
-    items?: {
-        id: string
-        etag: string
-        volumeInfo: {
-            title: string
-            authors: string[]
-            description: string
-            categories: string[]
-        }
-    }[]
+    items?: fetchBookItemResponseData[]
 }
 
 interface fetchBooksSuccess {
     type: IBooksActionType.FETCH_SUCCESS
     payload: {
         books: IBook[]
-        numberOfBooks: number
+        numberOfBooks?: number
     }
 }
 
@@ -58,4 +61,8 @@ interface fetchMoreBooks {
     type: IBooksActionType.FETCH_MORE
 }
 
-export type IBooksAction = fetchBooks | fetchBooksSuccess | fetchBooksError | fetchMoreBooks
+interface fetchOneBook {
+    type: IBooksActionType.FETCH_ONE
+}
+
+export type IBooksAction = fetchBooks | fetchBooksSuccess | fetchBooksError | fetchMoreBooks | fetchOneBook

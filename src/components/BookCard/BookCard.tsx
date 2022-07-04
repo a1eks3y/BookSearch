@@ -3,7 +3,6 @@ import s from './BookCard.module.css'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {
-    uniqueId: string
     id: string
     category?: string
     authors?: string[]
@@ -11,11 +10,14 @@ interface Props {
 }
 
 const BookCard: React.FC<Props> = (
-    { uniqueId, id, category, title, authors }
+    { id, category, title, authors }
 ) => {
     const navigate = useNavigate()
     return (
-        <div className={ s.card } onClick={ () => navigate(`/book/${ uniqueId }`) }>
+        <div
+            className={ s.card }
+            onClick={ () => navigate(`/book/${ id }`) } // open BookDetails
+        >
             <img
                 className={ s.front_cover }
                 src={ `https://books.google.com/books/content?id=${ id }&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api` }

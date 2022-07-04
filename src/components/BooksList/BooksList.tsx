@@ -4,6 +4,7 @@ import { useTypedSelector } from '../../hooks/useTypedSelector'
 import BookCard from '../BookCard/BookCard'
 import Loader from '../Loader/Loader'
 import { useAction } from '../../hooks/useAction'
+import Error from '../Error/Error'
 
 const BooksList: React.FC = () => {
     const { books, isLoading, error, numberOfBooks } = useTypedSelector(state => state)
@@ -21,7 +22,6 @@ const BooksList: React.FC = () => {
                 books.map(el => (
                     <BookCard
                         key={ el.uniqueId }
-                        uniqueId={ el.uniqueId }
                         id={ el.id }
                         category={ (el.categories ?? [])[ 0 ] }
                         authors={ el.authors }
@@ -30,12 +30,11 @@ const BooksList: React.FC = () => {
                 ))
             }
             {
-                error && <div className={ s.error_wrapper }>
-                    <span className={ s.error_text }>
-                        { error }
-                    </span>
-                    <button className={ s.load_more_btn }>Try again</button>
-                </div>
+                error && <Error
+                    onClickFn={ fetchMoreBooks }
+                    error={ error }
+                    btn_text={ 'Try again' }
+                />
             }
             {
                 !isLoading && numberOfBooks !== undefined && numberOfBooks > books.length && !error &&

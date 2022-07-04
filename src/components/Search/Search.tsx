@@ -1,10 +1,14 @@
 import * as React from 'react'
 import s from './Search.module.css'
-import searchSvg from '../../images/search.svg'
-import { useEffect, useState } from 'react'
+import spritesSvg from '../../images/sprites.svg'
+import { useEffect, useRef, useState } from 'react'
 import { useAction } from '../../hooks/useAction'
+import { NavLink, useLocation } from 'react-router-dom'
+import { useTypedSelector } from '../../hooks/useTypedSelector'
 
 const Search: React.FC = () => {
+    const location = useLocation()
+    const { books } = useTypedSelector(state => state)
     const [searchText, setSearchText] = useState<string>('')
     const [searchCategory, setSearchCategory] = useState<string>('all')
     const [searchSortBy, setSearchSortBy] = useState<string>('relevance')
@@ -13,9 +17,12 @@ const Search: React.FC = () => {
         const searchCategoryInUrl = searchCategory !== 'all' ? '+subject:' + searchCategory : ''
         fetchBooks(`q=${ searchText || '""' }${ searchCategoryInUrl }&orderBy=${ searchSortBy }`)
     }
+    const booksLength = useRef<number>(books.length)
+    booksLength.current = books.length
     useEffect(() => {
-        fetchBooks('q=""&orderBy=relevance')
-    }, [fetchBooks])
+        if ( !location.pathname.split('/')[ 2 ] && booksLength.current <= 1)
+            fetchBooks('q=""') //get books on first reload of homepage
+    }, [fetchBooks, location])
     return (
         <div className={ s.search }>
             <h1 className={ s.search_title }>Search for books</h1>
@@ -30,14 +37,15 @@ const Search: React.FC = () => {
                             searchBooks(searchCategory, searchSortBy)
                     } }
                 />
-                <button
+                <NavLink
+                    to="/"
                     className={ s.search_btn }
                     onClick={ () => searchBooks(searchCategory, searchSortBy) }
                 >
                     <svg>
-                        <use xlinkHref={ searchSvg + '#search' }/>
+                        <use xlinkHref={ spritesSvg + '#search' }/>
                     </svg>
-                </button>
+                </NavLink>
             </label>
             <div className={ s.search_query }>
                 <label className={ s.search_query_item }>
